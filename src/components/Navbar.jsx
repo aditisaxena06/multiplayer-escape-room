@@ -14,15 +14,7 @@ function Navbar() {
   return (
     <nav className="navbar">
 
-      <button
-        type="button"
-        className="nav-logo"
-        onClick={() => navigate("/dashboard")}
-      >
-        <span className="nav-logo-icon">🔐</span>
-        <span>Escape Together</span>
-      </button>
-
+      {/* LEFT — Navigation */}
       <div className="nav-links">
 
         <button
@@ -41,6 +33,17 @@ function Navbar() {
 
       </div>
 
+      {/* CENTER — Logo */}
+      <button
+        type="button"
+        className="nav-logo"
+        onClick={() => navigate("/dashboard")}
+      >
+        <span className="nav-logo-icon">🔐</span>
+        <span>Escape Together</span>
+      </button>
+
+      {/* RIGHT — User */}
       <div className="nav-user">
 
         <div className="user-avatar">

@@ -228,9 +228,10 @@ button {
   width: 100%;
   min-height: 76px;
   padding: 0 6%;
-  display: flex;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
 
   background: rgba(12, 17, 31, 0.85);
   border-bottom: 1px solid rgba(148, 163, 184, 0.12);
@@ -238,10 +239,46 @@ button {
   backdrop-filter: blur(15px);
 }
 
-.nav-logo {
+/* LEFT — Dashboard + Leaderboard */
+
+.nav-links {
+  grid-column: 1;
+
   display: flex;
   align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.nav-links button {
+  border: none;
+  background: transparent;
+
+  color: #94a3b8;
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 4px 0;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.nav-links button:hover {
+  color: #ffffff;
+}
+
+/* CENTER — Escape Together */
+
+.nav-logo {
+  grid-column: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
+
+  border: none;
+  background: transparent;
 
   color: #f8fafc;
   text-decoration: none;
@@ -249,32 +286,23 @@ button {
   font-family: "Space Grotesk", sans-serif;
   font-size: 1.2rem;
   font-weight: 700;
+
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 .nav-logo-icon {
   font-size: 1.4rem;
 }
 
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-.nav-links a {
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 0.95rem;
-  transition: 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: #ffffff;
-}
+/* RIGHT — Player + Logout */
 
 .nav-user {
+  grid-column: 3;
+
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
 
   color: #e2e8f0;
@@ -311,6 +339,7 @@ button {
   border-radius: 8px;
 
   font-size: 0.8rem;
+  cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -674,117 +703,55 @@ button {
 /* =========================
    DASHBOARD RESPONSIVE
 ========================= */
-
 @media (max-width: 768px) {
   .navbar {
-    padding: 15px 5%;
-    flex-wrap: wrap;
-    gap: 15px;
+    min-height: auto;
+    padding: 14px 20px;
+
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 14px;
+  }
+
+  .nav-logo {
+    grid-column: 1 / -1;
+    grid-row: 1;
+
+    justify-content: center;
+
+    font-size: 1.1rem;
   }
 
   .nav-links {
-    order: 3;
-    width: 100%;
-    justify-content: center;
+    grid-column: 1;
+    grid-row: 2;
+
+    gap: 18px;
+  }
+
+  .nav-links button {
+    font-size: 0.85rem;
+  }
+
+  .nav-user {
+    grid-column: 2;
+    grid-row: 2;
+
+    justify-content: flex-end;
+  }
+
+  .nav-user > span {
+    display: none;
+  }
+
+  .user-avatar {
+    width: 38px;
+    height: 38px;
   }
 
   .logout-btn {
-    display: none;
+    padding: 7px 10px;
   }
-
-  .dashboard-container {
-    padding: 50px 0;
-  }
-
-  .hero-section {
-    margin-bottom: 50px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .hero-btn {
-    width: 100%;
-    max-width: 300px;
-  }
-
-  .stats-section {
-    grid-template-columns: 1fr;
-  }
-
-  .room-preview-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .room-meta {
-    width: 100%;
-    justify-content: space-between;
-  }
-}
-
-@media (max-width: 500px) {
-  .nav-logo {
-    font-size: 1rem;
-  }
-
-  .nav-user span {
-    display: none;
-  }
-
-  .section-heading {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .room-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .small-btn {
-    width: 100%;
-  }
-}
-/* Navbar button fix */
-
-.nav-logo {
-  border: none;
-  cursor: pointer;
-  background: transparent;
-}
-
-.nav-links button {
-  border: none;
-  background: transparent;
-  color: #94a3b8;
-  font: inherit;
-  font-size: 0.95rem;
-  cursor: pointer;
-  padding: 8px 4px;
-  pointer-events: auto;
-}
-
-.nav-links button:hover {
-  color: #ffffff;
-}
-/* FORCE NAVBAR TO STAY ABOVE ALL PAGE CONTENT */
-
-.nav-user {
-  position: relative !important;
-  z-index: 10000 !important;
-  pointer-events: auto !important;
-}
-
-.nav-logo {
-  position: relative !important;
-  z-index: 10001 !important;
-  pointer-events: auto !important;
-  cursor: pointer !important;
 }
 /* =========================
    WAITING LOBBY
