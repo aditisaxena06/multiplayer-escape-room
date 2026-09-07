@@ -3131,3 +3131,125 @@ button {
     padding: 14px;
   }
 }
+/* FINAL RESPONSIVE POLISH */
+
+@media (max-width: 1024px) {
+  .game-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .puzzle-panel {
+    order: -1;
+  }
+
+  .interaction-section {
+    grid-template-columns: 1fr;
+  }
+
+  .game-players-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .game-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .game-top-info {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .game-players-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .interaction-section {
+    gap: 16px;
+  }
+
+  .panel-heading {
+    gap: 12px;
+  }
+
+  .room-environment {
+    min-height: 280px;
+  }
+
+  .environment-text {
+    font-size: 13px;
+    padding: 0 20px;
+  }
+
+  .chat-messages {
+    max-height: 300px;
+  }
+
+  .scoreboard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-top-info {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .progress-box {
+    width: 100%;
+  }
+
+  .game-title h2 {
+    font-size: 20px;
+  }
+
+  .game-title p {
+    font-size: 11px;
+  }
+
+  .puzzle-panel {
+    padding: 18px;
+  }
+
+  .environment-panel {
+    padding: 18px;
+  }
+
+  .chat-panel,
+  .activity-panel {
+    padding: 16px;
+  }
+
+  .chat-input-area {
+    gap: 8px;
+  }
+
+  .chat-input-area input {
+    min-width: 0;
+  }
+
+  .disconnect-demo-btn {
+    width: 100%;
+  }
+
+  .game-players-heading {
+    flex-wrap: wrap;
+  }
+
+  .online-count {
+    font-size: 12px;
+  }
+
+  .contribution-player {
+    gap: 10px;
+  }
+
+  .contribution-score {
+    min-width: 50px;
+    font-size: 16px;
+  }
+}

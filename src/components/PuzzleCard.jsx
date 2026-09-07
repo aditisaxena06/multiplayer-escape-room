@@ -22,10 +22,11 @@ function PuzzleCard({
       <div className="answer-row">
         <input
           type="text"
-          placeholder="Type your answer..."
           value={answer}
-          disabled={puzzleSolved || timeLeft <= 0}
-          onChange={handleAnswerChange}
+          onChange={(e) => setAnswer(e.target.value)}
+          placeholder="Enter your answer"
+          aria-label="Puzzle answer"
+          autoComplete="off"
         />
 
         <button
@@ -33,7 +34,7 @@ function PuzzleCard({
           className="submit-answer-btn"
           disabled={puzzleSolved || timeLeft <= 0}
         >
-          {puzzleSolved ? "Solved ✓" : "Submit →"}
+          {puzzleSolved ? "Solved ✓" : "Submit Answer"}
         </button>
       </div>
 

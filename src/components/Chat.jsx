@@ -49,16 +49,18 @@ function Chat({
       >
         <input
           type="text"
-          placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          placeholder="Type a message..."
+          aria-label="Type a chat message"
+          autoComplete="off"
         />
 
         <button
           type="submit"
-          className="chat-send-btn"
+          aria-label="Send chat message"
         >
-          Send →
+          ➤
         </button>
       </form>
     </div>
