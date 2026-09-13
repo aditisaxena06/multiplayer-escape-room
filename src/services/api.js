@@ -2,7 +2,7 @@ const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const apiRequest = async (endpoint, options = {}) => {
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+  const response = await fetch(`${API_BASE_URL}/api${endpoint}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export const getCurrentUser = async (token) => {
 // =========================================
 
 export const createRoom = async ({ maxPlayers }, token) => {
-  const response = await fetch("http://localhost:5000/api/rooms", {
+  const response = await fetch(`${API_BASE_URL}/api/rooms`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
