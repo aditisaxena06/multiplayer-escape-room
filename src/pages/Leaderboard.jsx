@@ -1,54 +1,59 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { GameContext } from "../context/GameContext";
+import { getLeaderboard } from "../services/api";
 
 function Leaderboard() {
-  const { user, teamScore, puzzlesSolved } = useContext(GameContext);
+  const { user, token, room } = useContext(GameContext);
 
-  const playerName = user?.name || "Player One";
+  const [leaderboardData, setLeaderboardData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const leaderboardData = [
-    {
-      rank: 1,
-      name: "Alex",
-      avatar: "🧑‍🚀",
-      score: 950,
-      puzzles: 5,
-      time: "3:42",
-    },
-    {
-      rank: 2,
-      name: playerName,
-      avatar: user?.avatar || "🎮",
-      score: teamScore || 500,
-      puzzles: puzzlesSolved || 5,
-      time: "4:18",
-    },
-    {
-      rank: 3,
-      name: "Rahul",
-      avatar: "🕵️",
-      score: 450,
-      puzzles: 4,
-      time: "4:36",
-    },
-    {
-      rank: 4,
-      name: "Priya",
-      avatar: "🧩",
-      score: 400,
-      puzzles: 4,
-      time: "4:51",
-    },
-    {
-      rank: 5,
-      name: "Sam",
-      avatar: "🧑‍💻",
-      score: 350,
-      puzzles: 3,
-      time: "5:00",
-    },
-  ];
+  useEffect(() => {
+    const loadLeaderboard = async () => {
+      if (!token) {
+        setError("Please login again.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError("");
+
+        if (!room?._id) {
+          setError("Room information is missing.");
+          setIsLoading(false);
+          return;
+        }
+
+        const data = await getLeaderboard(
+          room._id,
+          token
+        );
+
+        setLeaderboardData(data.leaderboard || []);
+      } catch (error) {
+        console.error("Leaderboard error:", error);
+        setError(
+          error.message || "Failed to load leaderboard."
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadLeaderboard();
+  }, [token, room?._id]);
+
+  const getRankIcon = (rank) => {
+    if (rank === 1) return "🥇";
+    if (rank === 2) return "🥈";
+    if (rank === 3) return "🥉";
+
+    return `#${rank}`;
+  };
 
   return (
     <div className="leaderboard-page">
@@ -56,68 +61,107 @@ function Leaderboard() {
 
       <main className="leaderboard-container">
         <div className="leaderboard-header">
-          <p className="section-label">TEAM RANKINGS</p>
+          <p className="section-label">
+            TEAM RANKINGS
+          </p>
 
           <h1>🏆 Leaderboard</h1>
 
           <p>
-            See how your team performed against other escape room players.
+            See how players performed across
+            completed puzzles.
           </p>
         </div>
 
         <div className="leaderboard-card">
+
+          {/* HEADER */}
           <div className="leaderboard-top">
             <span>Rank</span>
             <span>Player</span>
             <span>Score</span>
             <span>Puzzles</span>
-            <span>Time</span>
           </div>
 
-          {leaderboardData.map((player) => {
-            const isCurrentPlayer = player.name === playerName;
+          {/* LOADING */}
+          {isLoading && (
+            <div className="leaderboard-empty">
+              Loading leaderboard...
+            </div>
+          )}
 
-            return (
-              <div
-                key={`${player.rank}-${player.name}`}
-                className={`leaderboard-row ${
-                  isCurrentPlayer ? "current-player" : ""
-                }`}
-              >
-                <div className="player-rank">
-                  {player.rank === 1
-                    ? "🥇"
-                    : player.rank === 2
-                    ? "🥈"
-                    : player.rank === 3
-                    ? "🥉"
-                    : `#${player.rank}`}
-                </div>
+          {/* ERROR */}
+          {!isLoading && error && (
+            <div className="leaderboard-empty">
+              ⚠️ {error}
+            </div>
+          )}
 
-                <div className="leaderboard-player">
-                  <div className="leaderboard-avatar">
-                    {player.avatar}
-                  </div>
-
-                  <div>
-                    <strong>{player.name}</strong>
-
-                    {isCurrentPlayer && (
-                      <span className="you-label">YOU</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="leaderboard-score">
-                  {player.score}
-                </div>
-
-                <div>{player.puzzles}/5</div>
-
-                <div>{player.time}</div>
+          {/* EMPTY */}
+          {!isLoading &&
+            !error &&
+            leaderboardData.length === 0 && (
+              <div className="leaderboard-empty">
+                No scores available yet.
               </div>
-            );
-          })}
+            )}
+
+          {/* REAL LEADERBOARD */}
+          {!isLoading &&
+            !error &&
+            leaderboardData.map((player, index) => {
+              const rank = index + 1;
+
+              const isCurrentPlayer =
+                player.userId?.toString() ===
+                user?._id?.toString();
+
+              return (
+                <div
+                  key={player.userId}
+                  className={`leaderboard-row ${
+                    isCurrentPlayer
+                      ? "current-player"
+                      : ""
+                  }`}
+                >
+
+                  {/* RANK */}
+                  <div className="player-rank">
+                    {getRankIcon(rank)}
+                  </div>
+
+                  {/* PLAYER */}
+                  <div className="leaderboard-player">
+                    <div className="leaderboard-avatar">
+                      {player.avatar || "🎮"}
+                    </div>
+
+                    <div>
+                      <strong>
+                        {player.name}
+                      </strong>
+
+                      {isCurrentPlayer && (
+                        <span className="you-label">
+                          YOU
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* SCORE */}
+                  <div className="leaderboard-score">
+                    {player.totalScore}
+                  </div>
+
+                  {/* PUZZLES */}
+                  <div>
+                    {player.puzzlesSolved}/5
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </main>
     </div>

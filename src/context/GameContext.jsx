@@ -1,52 +1,79 @@
-import { createContext, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
+
+import { getCurrentUser } from "../services/api";
 
 export const GameContext = createContext();
 
 export function GameProvider({ children }) {
-  // -----------------------------
+  // ==========================================
   // USER STATE
-  // -----------------------------
+  // ==========================================
+
   const [user, setUser] = useState(null);
 
-  // -----------------------------
+  const [token, setToken] = useState(
+    localStorage.getItem("token")
+  );
+
+  // ==========================================
   // ROOM STATE
-  // -----------------------------
+  // ==========================================
+
   const [room, setRoom] = useState(null);
 
-  // -----------------------------
+  // ==========================================
   // GAME STATE
-  // -----------------------------
-  const [gameStatus, setGameStatus] = useState("waiting");
-  // waiting | loading | playing | completed | failed
+  // ==========================================
 
-  const [currentPuzzle, setCurrentPuzzle] = useState(1);
-  const [puzzlesSolved, setPuzzlesSolved] = useState(0);
+  const [gameStatus, setGameStatus] =
+    useState("waiting");
 
-  const [hintsUsed, setHintsUsed] = useState(0);
+  const [currentPuzzle, setCurrentPuzzle] =
+    useState(1);
 
-  const [teamScore, setTeamScore] = useState(0);
+  const [puzzlesSolved, setPuzzlesSolved] =
+    useState(0);
 
-  const [completionTime, setCompletionTime] = useState(0);
+  const [hintsUsed, setHintsUsed] =
+    useState(0);
 
-  // -----------------------------
+  const [teamScore, setTeamScore] =
+    useState(0);
+
+  const [completionTime, setCompletionTime] =
+    useState(0);
+
+  // ==========================================
   // PLAYER CONTRIBUTIONS
-  // -----------------------------
-  const [playerContributions, setPlayerContributions] = useState({});
+  // ==========================================
 
-  // -----------------------------
-  // ERROR / UI STATE
-  // -----------------------------
+  const [
+    playerContributions,
+    setPlayerContributions,
+  ] = useState({});
+
+  // ==========================================
+  // ERROR / LOADING STATE
+  // ==========================================
+
   const [error, setError] = useState(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] =
+    useState(false);
 
-  const [isPuzzleLoading, setIsPuzzleLoading] = useState(false);
+  const [isPuzzleLoading, setIsPuzzleLoading] =
+    useState(false);
 
-  // -----------------------------
-  // GAME HELPERS
-  // -----------------------------
+  // ==========================================
+  // RESET GAME
+  // ==========================================
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     setGameStatus("waiting");
     setCurrentPuzzle(1);
     setPuzzlesSolved(0);
@@ -57,40 +84,163 @@ export function GameProvider({ children }) {
     setError(null);
     setIsLoading(false);
     setIsPuzzleLoading(false);
-  };
+  }, []);
 
-  const startGame = () => {
+  // ==========================================
+  // RESTORE LOGIN
+  // ==========================================
+
+  useEffect(() => {
+    const restoreUser = async () => {
+      if (!token) {
+        return;
+      }
+
+      try {
+        const data =
+          await getCurrentUser(token);
+
+        setUser(data.user);
+      } catch (error) {
+        console.error(
+          "Failed to restore user:",
+          error
+        );
+
+        localStorage.removeItem("token");
+        setToken(null);
+        setUser(null);
+      }
+    };
+
+    restoreUser();
+  }, [token]);
+
+  // ==========================================
+  // LOGIN
+  // ==========================================
+
+  const login = useCallback(
+    (userData, authToken) => {
+      console.log(
+        "1. LOGIN FUNCTION CALLED"
+      );
+
+      localStorage.setItem(
+        "token",
+        authToken
+      );
+
+      setToken(authToken);
+      setUser(userData);
+      setError(null);
+
+      return true;
+    },
+    []
+  );
+
+  // ==========================================
+  // LOGOUT
+  // ==========================================
+
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+
+    setToken(null);
+    setUser(null);
+    setRoom(null);
+
+    resetGame();
+  }, [resetGame]);
+
+  // ==========================================
+  // START GAME
+  // ==========================================
+
+  const startGame = useCallback(() => {
     setError(null);
     setGameStatus("playing");
-  };
+  }, []);
 
-  const completeGame = (time = 0) => {
-    setCompletionTime(time);
-    setGameStatus("completed");
-  };
+  // ==========================================
+  // COMPLETE GAME
+  // ==========================================
 
-  const failGame = () => {
+  const completeGame = useCallback(
+    (time = 0) => {
+      setCompletionTime(time);
+      setGameStatus("completed");
+    },
+    []
+  );
+
+  // ==========================================
+  // FAIL GAME
+  // ==========================================
+
+  const failGame = useCallback(() => {
     setGameStatus("failed");
-  };
+  }, []);
 
-  const addHintUsed = () => {
-    setHintsUsed((prev) => prev + 1);
-  };
+  // ==========================================
+  // ADD HINT
+  // ==========================================
 
-  const addPuzzleSolved = () => {
-    setPuzzlesSolved((prev) => prev + 1);
-  };
+  const addHintUsed = useCallback(() => {
+    setHintsUsed(
+      (previous) => previous + 1
+    );
+  }, []);
 
-  const addScore = (points) => {
-    setTeamScore((prev) => prev + points);
-  };
+  // ==========================================
+  // ADD PUZZLE SOLVED
+  // ==========================================
 
-  const addPlayerContribution = (playerName, points) => {
-    setPlayerContributions((prev) => ({
-      ...prev,
-      [playerName]: (prev[playerName] || 0) + points,
-    }));
-  };
+  const addPuzzleSolved =
+    useCallback(() => {
+      setPuzzlesSolved(
+        (previous) => previous + 1
+      );
+    }, []);
+
+  // ==========================================
+  // ADD SCORE
+  // ==========================================
+
+  const addScore = useCallback(
+    (points) => {
+      setTeamScore(
+        (previous) =>
+          previous + points
+      );
+    },
+    []
+  );
+
+  // ==========================================
+  // ADD PLAYER CONTRIBUTION
+  // ==========================================
+
+  const addPlayerContribution =
+    useCallback(
+      (playerName, points) => {
+        setPlayerContributions(
+          (previous) => ({
+            ...previous,
+
+            [playerName]:
+              (previous[playerName] || 0) +
+              points,
+          })
+        );
+      },
+      []
+    );
+
+  // ==========================================
+  // CONTEXT PROVIDER
+  // ==========================================
 
   return (
     <GameContext.Provider
@@ -98,6 +248,9 @@ export function GameProvider({ children }) {
         // User
         user,
         setUser,
+        token,
+        login,
+        logout,
 
         // Room
         room,

@@ -3220,3 +3220,1344 @@ button {
     font-size: 16px;
   }
 }
+
+.number-pattern {
+  margin: 24px 0;
+}
+
+.pattern-label {
+  color: #a78bfa;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+.pattern-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 28px 20px;
+  background: #18233a;
+  border: 1px solid #33415c;
+  border-radius: 14px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.pattern-box span {
+  min-width: 55px;
+  text-align: center;
+}
+
+.pattern-question {
+  color: #a78bfa;
+  border: 2px dashed #a78bfa;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
+.pattern-hint {
+  margin-top: 12px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.puzzle-points {
+  margin-top: 18px;
+  font-size: 16px;
+}
+
+.door-puzzle {
+  margin: 24px 0;
+}
+
+.door-instruction {
+  margin-bottom: 18px;
+  color: #cbd5e1;
+  font-size: 15px;
+}
+
+.doors-container {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  padding: 28px;
+  background: #18233a;
+  border: 1px solid #33415c;
+  border-radius: 14px;
+}
+
+.door-option {
+  width: 160px;
+  padding: 18px;
+  text-align: center;
+  background: #111827;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  transition: 0.2s ease;
+}
+
+.door-option:hover {
+  transform: translateY(-4px);
+  border-color: #8b5cf6;
+}
+
+.door-symbol {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.door-visual {
+  font-size: 58px;
+  margin-bottom: 8px;
+}
+
+.door-option strong {
+  display: block;
+  color: #f8fafc;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.door-option span {
+  display: block;
+  margin-top: 5px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.door-hint {
+  margin-top: 14px;
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Door puzzle layout */
+.door-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 760px;
+  margin: 20px auto;
+}
+
+.door-option {
+  min-height: 160px;
+  padding: 24px 18px;
+  border: 1px solid #3b4a68;
+  border-radius: 14px;
+  background: #0f1729;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.door-option:hover {
+  transform: translateY(-4px);
+  border-color: #8b5cf6;
+}
+
+.door-symbol {
+  font-size: 42px;
+  margin-bottom: 12px;
+}
+
+.door-label {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.door-description {
+  font-size: 14px;
+  color: #aeb8cc;
+}
+
+.choice-instruction {
+  margin-bottom: 12px;
+}
+
+.choice-hint {
+  text-align: center;
+  margin-top: 14px;
+  color: #aeb8cc;
+}
+
+@media (max-width: 700px) {
+  .door-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================================
+   ESCAPE ROOM VISUAL OVERHAUL
+   Append this section to the END of src/index.css
+   No React/JS changes required.
+   ========================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap");
+
+:root {
+  --room-black: #0b0907;
+  --room-brown: #17100b;
+  --wood: #2a1a10;
+  --wood-light: #3a2415;
+  --wood-edge: #5a3920;
+  --brass: #b88a3b;
+  --brass-light: #d5ad5b;
+  --brass-dark: #6e4b20;
+  --parchment: #d8c59b;
+  --paper: #eee0bb;
+  --ink: #302417;
+  --warm-white: #eadfc6;
+  --muted: #9f927b;
+  --danger: #a83b32;
+  --success: #718b57;
+}
+
+/* ---------- GLOBAL ROOM ATMOSPHERE ---------- */
+
+html {
+  background: var(--room-black);
+}
+
+body {
+  color: var(--warm-white);
+  background:
+    radial-gradient(circle at 50% 25%, rgba(124, 79, 36, 0.12), transparent 35%),
+    radial-gradient(circle at 20% 80%, rgba(104, 59, 25, 0.10), transparent 30%),
+    linear-gradient(135deg, #090705, #15100b 48%, #080604);
+  font-family: "Inter", sans-serif;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.08;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,.12) 0,
+      rgba(255,255,255,.12) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  mix-blend-mode: overlay;
+}
+
+button,
+input,
+select {
+  font-family: "Inter", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.game-title h2,
+.panel-heading h2,
+.puzzle-panel h2,
+.logo-section h1 {
+  font-family: "Cinzel", Georgia, serif;
+  letter-spacing: .02em;
+}
+
+button {
+  transition: transform .16s ease, background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+/* ---------- REMOVE THE PURPLE/CYAN LANGUAGE ---------- */
+
+.primary-btn,
+.create-room-buttons .primary-btn,
+.submit-answer-btn,
+.next-puzzle-btn {
+  background: linear-gradient(180deg, #9a7332 0%, #76501f 100%) !important;
+  border: 1px solid #c49a4b !important;
+  color: #fff3d3 !important;
+  border-radius: 5px !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 -3px 0 rgba(45,25,8,.38),
+    0 5px 12px rgba(0,0,0,.38) !important;
+  text-shadow: 0 1px 2px #2b1908;
+}
+
+.primary-btn:hover,
+.create-room-buttons .primary-btn:hover,
+.submit-answer-btn:hover,
+.next-puzzle-btn:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(180deg, #b08843 0%, #805a25 100%) !important;
+  border-color: #dfbd72 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    inset 0 -3px 0 rgba(45,25,8,.4),
+    0 7px 16px rgba(0,0,0,.45) !important;
+}
+
+.secondary-btn,
+.logout-btn,
+.leave-game-btn,
+.status-toggle {
+  background: #1a120c !important;
+  color: #cdbd9e !important;
+  border: 1px solid #594027 !important;
+  border-radius: 4px !important;
+}
+
+.secondary-btn:hover,
+.logout-btn:hover,
+.leave-game-btn:hover,
+.status-toggle:hover {
+  background: #291b10 !important;
+  border-color: var(--brass) !important;
+  color: #f0dfb9 !important;
+}
+
+/* ---------- NAVBAR ---------- */
+
+.navbar {
+  min-height: 68px;
+  padding: 0 5%;
+  background:
+    linear-gradient(180deg, rgba(44,27,16,.98), rgba(19,12,8,.98)) !important;
+  border-bottom: 3px solid #4d321b !important;
+  box-shadow: 0 5px 18px rgba(0,0,0,.5);
+  backdrop-filter: none !important;
+}
+
+.navbar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -3px;
+  height: 1px;
+  background: rgba(194,148,65,.45);
+}
+
+.nav-links button {
+  color: #a9997c !important;
+  font-family: "Cinzel", Georgia, serif;
+  font-size: .82rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.nav-links button:hover,
+.text-btn:hover {
+  color: var(--brass-light) !important;
+}
+
+.nav-logo {
+  color: #e5d3ac !important;
+  font-family: "Cinzel", Georgia, serif !important;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.nav-logo-icon {
+  filter: sepia(.7);
+}
+
+.user-avatar {
+  background: radial-gradient(circle at 35% 30%, #c99b4c, #6c481e) !important;
+  border: 2px solid #8c652f;
+  border-radius: 50% !important;
+  box-shadow: inset 0 0 0 2px #2b1b0d;
+}
+
+/* ---------- AUTH / GENERAL FORM PAGES ---------- */
+
+.auth-page,
+.dashboard-page,
+.lobby-page,
+.create-room-page,
+.join-room-page,
+.result-page {
+  background:
+    radial-gradient(circle at 50% 15%, rgba(126,82,35,.13), transparent 30%),
+    linear-gradient(135deg, #0b0806, #17100a 55%, #090705) !important;
+}
+
+.auth-page::before,
+.auth-page::after {
+  display: none !important;
+}
+
+.auth-card,
+.create-room-card,
+.join-room-card,
+.result-card {
+  background:
+    linear-gradient(145deg, rgba(47,30,17,.96), rgba(20,13,8,.98)) !important;
+  border: 1px solid #5a3c21 !important;
+  border-radius: 6px !important;
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.6),
+    inset 0 0 35px rgba(0,0,0,.22) !important;
+  backdrop-filter: none !important;
+}
+
+.auth-card::before,
+.create-room-card::before,
+.join-room-card::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(182,137,59,.14);
+  pointer-events: none;
+}
+
+.logo-icon,
+.page-icon,
+.join-room-icon,
+.result-icon {
+  background: #2a1a0e !important;
+  border: 1px solid #745126 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 15px rgba(0,0,0,.45) !important;
+}
+
+.logo-icon {
+  font-size: 28px;
+}
+
+.logo-section h1,
+.auth-card h2,
+.create-room-card h1,
+.join-room-card h1 {
+  color: #ead7ad !important;
+}
+
+.logo-section p,
+.page-description,
+.auth-switch {
+  color: #9e9078 !important;
+}
+
+.input-group input,
+.form-group input,
+.form-group select,
+.join-room-card input {
+  background: #0f0b08 !important;
+  border: 1px solid #554027 !important;
+  border-radius: 3px !important;
+  color: #eadfc9 !important;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.45);
+}
+
+.input-group input:focus,
+.form-group input:focus,
+.form-group select:focus,
+.join-room-card input:focus {
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 2px rgba(184,138,59,.13), inset 0 3px 8px rgba(0,0,0,.45) !important;
+}
+
+.input-group label,
+.form-group label {
+  color: #bcae92 !important;
+  font-family: "Cinzel", Georgia, serif;
+}
+
+.section-label,
+.hero-badge {
+  color: var(--brass-light) !important;
+}
+
+.hero-badge {
+  background: #24170d !important;
+  border: 1px solid #634522 !important;
+  border-radius: 3px !important;
+}
+
+.hero-section h1 span {
+  background: none !important;
+  color: #d4ad64 !important;
+  -webkit-text-fill-color: #d4ad64 !important;
+}
+
+/* ---------- DASHBOARD ---------- */
+
+.dashboard-container {
+  padding-top: 55px;
+}
+
+.stat-card,
+.room-preview-card,
+.welcome-message {
+  background: linear-gradient(145deg, #24170d, #130d08) !important;
+  border: 1px solid #52371f !important;
+  border-radius: 5px !important;
+  box-shadow: 0 10px 25px rgba(0,0,0,.35);
+}
+
+.stat-card:hover,
+.room-preview-card:hover {
+  transform: translateY(-2px);
+  border-color: #7b592d !important;
+}
+
+.stat-icon,
+.room-icon {
+  background: #2b1b0e !important;
+  border: 1px solid #624522;
+  border-radius: 4px !important;
+}
+
+.stat-card p,
+.room-info p {
+  color: #998b72 !important;
+}
+
+.stat-card h2,
+.room-info h3 {
+  color: #e4d3af;
+}
+
+.room-info span {
+  color: #c39b54 !important;
+}
+
+.welcome-message {
+  color: #a99a7e !important;
+}
+
+/* ---------- LOBBY ---------- */
+
+.status-item,
+.room-code-card,
+.player-card {
+  background: linear-gradient(145deg, #24170d, #140d08) !important;
+  border: 1px solid #553920 !important;
+  border-radius: 5px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
+}
+
+.status-label,
+.room-code-card p {
+  color: #b88a3b !important;
+}
+
+.room-code {
+  font-family: "Special Elite", monospace !important;
+  color: #dfc17c !important;
+  text-shadow: 0 2px 3px #000;
+}
+
+.player-avatar {
+  background: #2d1c0f !important;
+  border: 1px solid #684823;
+  border-radius: 4px !important;
+}
+
+.player-card:hover {
+  transform: translateY(-2px);
+  border-color: #87612e !important;
+}
+
+.host-badge {
+  color: #d1a34e !important;
+}
+
+.player-status {
+  color: #958871 !important;
+}
+
+.ready-dot {
+  background: #718b57 !important;
+  box-shadow: 0 0 6px rgba(113,139,87,.45);
+}
+
+.not-ready-dot {
+  background: #a87834 !important;
+}
+
+/* =========================================================
+   THE ACTUAL ESCAPE ROOM
+   ========================================================= */
+
+.escape-room-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 18% 30%, rgba(142,91,35,.13), transparent 24%),
+    radial-gradient(circle at 78% 65%, rgba(101,57,23,.10), transparent 26%),
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,.018) 0,
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 42px
+    ),
+    linear-gradient(135deg, #090705 0%, #1a1009 48%, #090604 100%) !important;
+  color: #e4d8bf;
+}
+
+.escape-room-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(213,157,65,.08), transparent 18%),
+    radial-gradient(circle at 68% 60%, rgba(213,157,65,.05), transparent 20%);
+  mix-blend-mode: screen;
+}
+
+/* Header becomes an old wooden beam */
+
+.game-header {
+  min-height: 72px;
+  padding: 0 4%;
+  background:
+    linear-gradient(180deg, #3a2414, #1a1009) !important;
+  border-bottom: 4px solid #5d3b1e !important;
+  box-shadow:
+    inset 0 -1px 0 rgba(214,168,82,.35),
+    0 8px 20px rgba(0,0,0,.55);
+}
+
+.game-icon {
+  width: 42px;
+  height: 42px;
+  background: #24160b !important;
+  border: 1px solid #79562b;
+  border-radius: 3px !important;
+  box-shadow: inset 0 0 10px #000;
+}
+
+.game-title p {
+  color: #a9823e !important;
+  font-family: "Cinzel", Georgia, serif;
+}
+
+.game-title h2 {
+  color: #ead8b4;
+}
+
+.game-top-info {
+  gap: 9px;
+}
+
+/* Physical brass timer / progress gauges */
+
+.timer-box,
+.progress-box {
+  background: linear-gradient(145deg, #30200f, #130d07) !important;
+  border: 2px solid #755326 !important;
+  border-radius: 4px !important;
+  box-shadow:
+    inset 0 0 10px rgba(0,0,0,.65),
+    0 3px 8px rgba(0,0,0,.35);
+}
+
+.timer-box strong {
+  color: #d7ad57 !important;
+  font-family: "Special Elite", monospace;
+  letter-spacing: 1px;
+}
+
+.progress-box span {
+  color: #8f8068 !important;
+}
+
+.game-container {
+  max-width: 1320px;
+  padding: 28px 24px 55px;
+}
+
+/* Status strip becomes an engraved metal plate */
+
+.game-status-bar {
+  background: linear-gradient(180deg, #2a1b10, #171009) !important;
+  border: 1px solid #5a3d22 !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0 0 18px rgba(0,0,0,.4), 0 5px 14px rgba(0,0,0,.3);
+  color: #c8b99d !important;
+}
+
+.progress-text {
+  color: #9d8e75 !important;
+}
+
+.progress-track {
+  background: #0d0906 !important;
+  border: 1px solid #49311b;
+  border-radius: 2px !important;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #765020, #c2964a) !important;
+}
+
+/* Main panels are wooden walls, not SaaS cards */
+
+.environment-panel,
+.puzzle-panel,
+.game-players {
+  background:
+    linear-gradient(145deg, rgba(43,27,15,.98), rgba(19,12,8,.99)) !important;
+  border: 1px solid #5a3c20 !important;
+  border-radius: 4px !important;
+  box-shadow:
+    inset 0 0 35px rgba(0,0,0,.28),
+    0 12px 28px rgba(0,0,0,.45);
+}
+
+.panel-heading {
+  border-bottom: 1px solid rgba(168,124,59,.18);
+  padding-bottom: 14px;
+}
+
+.panel-heading h2 {
+  color: #e1cfaa;
+}
+
+.room-live {
+  color: #899c69 !important;
+  font-family: "Special Elite", monospace;
+}
+
+/* ---------- ROOM ENVIRONMENT ---------- */
+
+.room-environment {
+  height: 410px;
+  border-radius: 2px !important;
+  border: 8px solid #24160c !important;
+  outline: 1px solid #6a4722;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(196,143,56,.13), transparent 13%),
+    linear-gradient(90deg, rgba(0,0,0,.28), transparent 28%, transparent 72%, rgba(0,0,0,.35)),
+    repeating-linear-gradient(
+      0deg,
+      #302014 0,
+      #302014 28px,
+      #28190f 29px,
+      #28190f 31px
+    ) !important;
+  box-shadow:
+    inset 0 0 80px rgba(0,0,0,.8),
+    0 8px 20px rgba(0,0,0,.55);
+}
+
+.room-environment::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(190,145,67,.17);
+  pointer-events: none;
+}
+
+.moon {
+  opacity: .65;
+  filter: sepia(.7) saturate(.65);
+}
+
+.wall-picture {
+  filter: sepia(.75) saturate(.65) brightness(.75);
+}
+
+.mystery-door {
+  filter: sepia(.55) saturate(.65) brightness(.72);
+  text-shadow: 0 10px 25px #000;
+}
+
+.candle {
+  filter: sepia(.6) saturate(.7);
+  text-shadow:
+    0 0 12px rgba(220,158,58,.65),
+    0 0 30px rgba(196,123,34,.3);
+}
+
+.locked-chest {
+  filter: sepia(.65) saturate(.7) brightness(.75);
+}
+
+.environment-text {
+  color: #a99a7d !important;
+  font-family: "Special Elite", monospace;
+  text-shadow: 0 1px 2px #000;
+}
+
+/* ---------- INVENTORY = WOODEN DRAWER ---------- */
+
+.inventory-section {
+  margin-top: 22px;
+  padding-top: 2px;
+}
+
+.inventory-heading {
+  color: #bfae8d;
+}
+
+.inventory-items {
+  gap: 7px;
+}
+
+.inventory-item {
+  min-height: 78px;
+  background:
+    linear-gradient(145deg, #382313, #1b1009) !important;
+  border: 1px solid #694821 !important;
+  border-radius: 3px !important;
+  box-shadow:
+    inset 0 0 12px rgba(0,0,0,.55),
+    0 2px 5px rgba(0,0,0,.4);
+}
+
+.inventory-item:hover {
+  border-color: #a27432 !important;
+  transform: translateY(-1px);
+}
+
+.inventory-item span {
+  color: #b09e80 !important;
+  font-family: "Special Elite", monospace;
+}
+
+/* ---------- PUZZLE = AGED PAPER ---------- */
+
+.puzzle-number {
+  background: #8e6a32 !important;
+  color: #f5e6bd !important;
+  border: 1px solid #c29a4d;
+  border-radius: 2px !important;
+  font-family: "Special Elite", monospace;
+  box-shadow: 0 2px 5px rgba(0,0,0,.35);
+}
+
+.puzzle-panel h2 {
+  color: #e5d2ab;
+}
+
+.puzzle-description {
+  color: #a99a80 !important;
+}
+
+.puzzle-riddle {
+  position: relative;
+  background:
+    linear-gradient(rgba(255,246,213,.9), rgba(224,202,153,.96)),
+    #e5d1a2 !important;
+  color: #332719 !important;
+  border: 1px solid #9b7b46 !important;
+  border-left: 5px solid #725326 !important;
+  border-radius: 2px !important;
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.35),
+    inset 0 0 25px rgba(115,75,28,.12);
+  font-family: "Special Elite", Georgia, serif;
+  font-style: normal;
+}
+
+.puzzle-riddle::before {
+  content: "✦  CASE NOTE  ✦";
+  display: block;
+  margin-bottom: 10px;
+  color: #725326;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* ---------- HINT = SECRET NOTE ---------- */
+
+.clue-section {
+  background: #1d130a !important;
+  border: 1px solid #60411f !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0 0 15px rgba(0,0,0,.4);
+}
+
+.clue-heading p {
+  color: #bd9348 !important;
+}
+
+.clue-heading strong {
+  color: #d4c3a3;
+}
+
+.hint-message {
+  background:
+    linear-gradient(rgba(232,216,177,.96), rgba(205,181,133,.96)) !important;
+  border: 1px solid #987849 !important;
+  border-radius: 2px !important;
+  color: #342719 !important;
+  font-family: "Special Elite", Georgia, serif;
+}
+
+.hint-btn {
+  background: #2a1a0e !important;
+  border: 1px solid #80602d !important;
+  color: #d3a958 !important;
+  border-radius: 3px !important;
+  font-family: "Special Elite", monospace;
+}
+
+.hint-btn:hover:not(:disabled) {
+  background: #38230f !important;
+  border-color: #b88a3b !important;
+}
+
+/* ---------- ANSWER LOCK ---------- */
+
+.answer-section {
+  border-top: 1px solid #594025 !important;
+}
+
+.answer-section label {
+  color: #aa9b80 !important;
+  font-family: "Cinzel", Georgia, serif;
+}
+
+.answer-row input {
+  background: #0d0906 !important;
+  border: 1px solid #624522 !important;
+  border-radius: 3px !important;
+  color: #eadfc9 !important;
+  box-shadow: inset 0 3px 8px rgba(0,0,0,.55);
+}
+
+.answer-row input:focus {
+  border-color: #b78a3c !important;
+  box-shadow: 0 0 0 2px rgba(183,138,60,.12), inset 0 3px 8px rgba(0,0,0,.55) !important;
+}
+
+.submit-answer-btn {
+  min-width: 125px;
+  font-family: "Cinzel", Georgia, serif;
+  letter-spacing: .04em;
+}
+
+/* ---------- PLAYERS = TEAM AROUND THE TABLE ---------- */
+
+.game-players {
+  padding: 22px;
+}
+
+.game-player-card {
+  background: linear-gradient(145deg, #2a1a0e, #160d08) !important;
+  border: 1px solid #563a20 !important;
+  border-radius: 3px !important;
+  box-shadow: inset 0 0 12px rgba(0,0,0,.35);
+}
+
+.game-player-avatar {
+  background: #2f1d0f !important;
+  border: 1px solid #6b4924;
+  border-radius: 3px !important;
+}
+
+.game-player-card h3 {
+  color: #dfcfad;
+}
+
+.game-player-card p {
+  color: #93856e !important;
+}
+
+.online-count {
+  color: #899d6b !important;
+  font-family: "Special Elite", monospace;
+}
+
+/* ---------- NEXT PUZZLE ---------- */
+
+.next-puzzle-section {
+  margin: 18px 0;
+}
+
+.next-puzzle-btn {
+  border-radius: 3px !important;
+  font-family: "Cinzel", Georgia, serif;
+}
+
+/* ---------- RESULT ---------- */
+
+.result-card {
+  max-width: 860px;
+  position: relative;
+}
+
+.result-card::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(184,138,59,.15);
+  pointer-events: none;
+}
+
+.result-icon {
+  color: #d0a452;
+}
+
+.result-card h1 {
+  color: #e7d5b0;
+}
+
+.result-description {
+  color: #a7987d !important;
+}
+
+.result-stat {
+  background: #1a1009 !important;
+  border: 1px solid #50361e !important;
+  border-radius: 3px !important;
+}
+
+.result-stat strong {
+  color: #d7c29b;
+}
+
+/* ---------- CHAT / ACTIVITY ---------- */
+
+.chat-panel,
+.chat-messages,
+.chat-input-area,
+.chat-message,
+.contribution-item,
+.contributions-section,
+.scoreboard,
+.scoreboard-item,
+.leaderboard-card,
+.leaderboard-row {
+  background: #1b1009 !important;
+  border-color: #50351d !important;
+}
+
+.chat-panel {
+  border-radius: 4px !important;
+  box-shadow: inset 0 0 20px rgba(0,0,0,.35);
+}
+
+.chat-message {
+  border-radius: 3px !important;
+}
+
+.chat-input-area input {
+  background: #0d0906 !important;
+  border-color: #5b3e22 !important;
+  color: #eadfc9 !important;
+  border-radius: 3px !important;
+}
+
+.chat-send-btn {
+  background: #765021 !important;
+  color: #f0dfba !important;
+  border-radius: 3px !important;
+  border: 1px solid #a17835 !important;
+}
+
+/* ---------- ERROR / SUCCESS STATES ---------- */
+
+.correct-message,
+.success-message {
+  color: #91a96f !important;
+}
+
+.wrong-message,
+.failure-message,
+.room-error {
+  color: #c15c4e !important;
+}
+
+.disconnect-warning {
+  background: #29130f !important;
+  border-color: #7e3c32 !important;
+}
+
+/* ---------- LEADERBOARD ---------- */
+
+.leaderboard-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(141,92,38,.12), transparent 30%),
+    #0c0805 !important;
+}
+
+.leaderboard-card,
+.leaderboard-row {
+  border-radius: 4px !important;
+}
+
+.leaderboard-avatar {
+  background: #2d1c0e !important;
+  border: 1px solid #684823 !important;
+  border-radius: 3px !important;
+}
+
+.leaderboard-score,
+.player-rank {
+  color: #c69b4f !important;
+}
+
+/* ---------- SMALL DETAILS ---------- */
+
+a {
+  color: #c09a58;
+}
+
+a:hover {
+  color: #dfbd76;
+}
+
+::selection {
+  background: #7d592c;
+  color: #fff1ce;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0c0805;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #50361e;
+  border: 2px solid #0c0805;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #79572b;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 950px) {
+  .game-layout {
+    gap: 18px;
+  }
+
+  .environment-panel,
+  .puzzle-panel {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .game-header {
+    background: linear-gradient(180deg, #352110, #170d08) !important;
+  }
+
+  .game-top-info {
+    width: 100%;
+  }
+
+  .timer-box,
+  .progress-box {
+    flex: 1;
+  }
+
+  .room-environment {
+    height: 310px;
+  }
+
+  .puzzle-riddle {
+    padding: 15px;
+  }
+
+  .inventory-items {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .game-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .game-header {
+    padding: 12px 15px;
+  }
+
+  .game-title h2 {
+    font-size: 15px;
+  }
+
+  .game-top-info {
+    flex-direction: column;
+  }
+
+  .timer-box,
+  .progress-box {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   LEADERBOARD - ESCAPE ROOM WARM THEME FIX
+   ========================================================= */
+
+.leaderboard-page {
+  background:
+    radial-gradient(circle at top, rgba(120, 78, 35, 0.12), transparent 45%),
+    #0b0907 !important;
+  color: #eadfc6 !important;
+}
+
+.leaderboard-container {
+  color: #eadfc6 !important;
+}
+
+.leaderboard-header h1 {
+  color: #eadfc6 !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8) !important;
+}
+
+.leaderboard-header > p:not(.section-label) {
+  color: #9f927b !important;
+}
+
+.leaderboard-card {
+  background: #17100b !important;
+  border: 1px solid #5a3920 !important;
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(213, 173, 91, 0.08) !important;
+}
+
+.leaderboard-top {
+  background: #2a1a10 !important;
+  color: #d5ad5b !important;
+  border-bottom: 1px solid #6e4b20 !important;
+}
+
+.leaderboard-top span {
+  color: #d5ad5b !important;
+}
+
+.leaderboard-row {
+  background: #17100b !important;
+  color: #eadfc6 !important;
+  border-bottom: 1px solid rgba(90, 57, 32, 0.65) !important;
+}
+
+.leaderboard-row:hover {
+  background: #21150d !important;
+}
+
+.leaderboard-row > div {
+  color: #eadfc6 !important;
+}
+
+.leaderboard-player strong {
+  color: #eadfc6 !important;
+}
+
+.leaderboard-score {
+  color: #d5ad5b !important;
+  font-weight: 700 !important;
+}
+
+.leaderboard-row .player-rank {
+  color: #d5ad5b !important;
+}
+
+.leaderboard-row .leaderboard-avatar {
+  background: #21150d !important;
+  border: 1px solid #6e4b20 !important;
+}
+
+.leaderboard-row.current-player {
+  background: #21150d !important;
+  border-left: 3px solid #b88a3b !important;
+}
+
+.leaderboard-row.current-player .leaderboard-player strong {
+  color: #f0dfb5 !important;
+}
+
+.you-label {
+  background: #718b57 !important;
+  color: #f5edda !important;
+  border: 1px solid #8ca66b !important;
+}
+
+.leaderboard-empty {
+  color: #9f927b !important;
+  background: #17100b !important;
+}
+
+/* Remove the old blue/purple leaderboard colors */
+.leaderboard-page h1,
+.leaderboard-page h2,
+.leaderboard-page h3,
+.leaderboard-page strong,
+.leaderboard-page span,
+.leaderboard-page div {
+  text-shadow: none;
+}
+
+.leaderboard-page .section-label {
+  color: #d5ad5b !important;
+}
+
+/* =========================================
+   GAME HISTORY
+========================================= */
+
+.history-item {
+  display: grid;
+  grid-template-columns:
+    1.2fr
+    1.2fr
+    1fr
+    1fr;
+
+  gap: 20px;
+
+  padding: 18px;
+
+  border: 1px solid
+    rgba(255, 255, 255, 0.1);
+
+  border-radius: 12px;
+
+  margin-bottom: 12px;
+}
+
+
+.history-item strong {
+  display: block;
+
+  font-size: 16px;
+}
+
+
+.history-item p {
+  margin: 6px 0 0;
+
+  opacity: 0.7;
+
+  font-size: 13px;
+}
+
+
+@media (max-width: 768px) {
+  .history-item {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .history-item {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,4 +1,10 @@
-function PlayerCard({ player, isHost = false, isDisconnected = false }) {
+function PlayerCard({
+  player,
+  isHost = false,
+  isCurrentUser = false,
+}) {
+  const isDisconnected = player.isConnected === false;
+
   return (
     <div
       className={`game-player-card ${
@@ -6,12 +12,18 @@ function PlayerCard({ player, isHost = false, isDisconnected = false }) {
       }`}
     >
       <div className="game-player-avatar">
-        {player.avatar}
+        {player.avatar || "🎮"}
       </div>
 
       <div>
         <h3>
           {player.name}
+
+          {isCurrentUser && (
+            <span className="you-tag">
+              YOU
+            </span>
+          )}
 
           {isHost && (
             <span className="host-tag">

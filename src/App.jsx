@@ -9,6 +9,7 @@ import WaitingLobby from "./pages/WaitingLobby";
 import EscapeRoom from "./pages/EscapeRoom";
 import GameResult from "./pages/GameResult";
 import Leaderboard from "./pages/Leaderboard";
+import GameHistory from "./pages/GameHistory";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
       <Route path="/escape-room" element={<EscapeRoom />} />
       <Route path="/result" element={<GameResult />} />
       <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="/history" element={<GameHistory />} />
     </Routes>
   );
 }

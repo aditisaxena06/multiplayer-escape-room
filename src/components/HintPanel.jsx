@@ -1,9 +1,12 @@
 function HintPanel({
-  currentPuzzle,
+  hints = [],
   showHint,
   onToggle,
   disabled = false,
+  isLoading = false,
 }) {
+  const firstHint = hints[0];
+
   return (
     <div className="clue-section">
       <div className="clue-heading">
@@ -13,35 +16,18 @@ function HintPanel({
           <p>CLUE</p>
 
           <strong>
-            {currentPuzzle === 1 && "Look at what light creates."}
-            {currentPuzzle === 2 &&
-              "Think about how the numbers are changing."}
-            {currentPuzzle === 3 &&
-              "Choose the door that is clearly safe."}
-            {currentPuzzle === 4 &&
-              "Think of something with many keys."}
-            {currentPuzzle === 5 &&
-              "Think about something that has hands and tells time."}
+            {isLoading
+              ? "Loading available hints..."
+              : showHint && firstHint
+                ? "Hint revealed."
+                : "Need a little help? Use a hint."}
           </strong>
         </div>
       </div>
 
-      {showHint && (
+      {showHint && firstHint && (
         <div className="hint-message">
-          {currentPuzzle === 1 &&
-            "👀 You can see it when there is light, but not when everything is dark."}
-
-          {currentPuzzle === 2 &&
-            "🔢 Each number is being multiplied by 2. Continue the pattern."}
-
-          {currentPuzzle === 3 &&
-            "🚪 Read the descriptions carefully. One door is explicitly marked safe."}
-
-          {currentPuzzle === 4 &&
-            "🎹 Think of something that has many keys but isn't used to open doors."}
-
-          {currentPuzzle === 5 &&
-            "🕐 It has hands, but those hands cannot clap."}
+          💡 {firstHint.text}
         </div>
       )}
 
@@ -49,9 +35,14 @@ function HintPanel({
         type="button"
         className="hint-btn"
         onClick={onToggle}
-        disabled={disabled}
+        disabled={disabled || isLoading}
       >
-        💡 {showHint ? "Hide Hint" : "Get Hint"}
+        💡{" "}
+        {isLoading
+          ? "Loading Hint..."
+          : showHint
+            ? "Hide Hint"
+            : "Get Hint"}
       </button>
     </div>
   );

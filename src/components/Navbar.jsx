@@ -7,14 +7,13 @@ function Navbar() {
   const { user, setUser } = useContext(GameContext);
 
   const logout = () => {
+    localStorage.removeItem("token");
     setUser(null);
     navigate("/");
   };
 
   return (
     <nav className="navbar">
-
-      {/* LEFT — Navigation */}
       <div className="nav-links">
 
         <button
@@ -31,26 +30,38 @@ function Navbar() {
           Leaderboard
         </button>
 
+        <button
+          type="button"
+          onClick={() => navigate("/history")}
+        >
+          History
+        </button>
+
       </div>
 
-      {/* CENTER — Logo */}
       <button
         type="button"
         className="nav-logo"
         onClick={() => navigate("/dashboard")}
       >
-        <span className="nav-logo-icon">🔐</span>
-        <span>Escape Together</span>
+        <span className="nav-logo-icon">
+          🔐
+        </span>
+
+        <span>
+          Escape Together
+        </span>
       </button>
 
-      {/* RIGHT — User */}
       <div className="nav-user">
 
         <div className="user-avatar">
           {user?.avatar || "🎮"}
         </div>
 
-        <span>{user?.name || "Player One"}</span>
+        <span>
+          {user?.name || "Player One"}
+        </span>
 
         <button
           type="button"
@@ -61,7 +72,6 @@ function Navbar() {
         </button>
 
       </div>
-
     </nav>
   );
 }

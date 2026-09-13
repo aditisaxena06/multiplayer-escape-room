@@ -5,63 +5,64 @@ import PuzzleCard from "./PuzzleCard";
 function PuzzleSection({
   currentPuzzle,
   totalPuzzles,
-  isPuzzleLoading,
+  hints,
   showHint,
-  setShowHint,
-  addHintUsed,
-  puzzleSolved,
-  timeLeft,
+  onHint,
+  isHintLoading,
   answer,
   setAnswer,
-  message,
-  handleSubmit,
+  onSubmit,
+  isSubmitting,
+  timeLeft,
 }) {
-  return (
-    <aside className="puzzle-panel">
-      {isPuzzleLoading ? (
+  if (!currentPuzzle) {
+    return (
+      <aside className="puzzle-panel">
         <div className="puzzle-loading">
-          <div className="puzzle-loading-icon">🧩</div>
-          <h2>Loading Next Puzzle...</h2>
-          <p>Preparing the next clue for your team.</p>
-          <div className="loading-spinner"></div>
-        </div>
-      ) : (
-        <>
-          <div className="puzzle-number">
-            PUZZLE {currentPuzzle} OF {totalPuzzles}
+          <div className="puzzle-loading-icon">
+            🧩
           </div>
 
-          <PuzzleRenderer currentPuzzle={currentPuzzle} />
+          <h2>Loading Puzzle...</h2>
 
-          <HintPanel
-            currentPuzzle={currentPuzzle}
-            showHint={showHint}
-            onToggle={() => {
-              if (!showHint) {
-                addHintUsed();
-              }
+          <p>
+            Preparing the next clue for your team.
+          </p>
 
-              setShowHint((prev) => !prev);
-            }}
-            disabled={puzzleSolved || timeLeft <= 0}
-          />
+          <div className="loading-spinner"></div>
+        </div>
+      </aside>
+    );
+  }
 
-          <PuzzleCard
-            answer={answer}
-            setAnswer={(value) => {
-              setAnswer(value);
+  return (
+    <aside className="puzzle-panel">
+      <div className="puzzle-number">
+        PUZZLE {currentPuzzle.order} OF{" "}
+        {totalPuzzles}
+      </div>
 
-              if (!puzzleSolved && timeLeft > 0) {
-                // Message is cleared by the parent when needed.
-              }
-            }}
-            message={message}
-            puzzleSolved={puzzleSolved}
-            timeLeft={timeLeft}
-            onSubmit={handleSubmit}
-          />
-        </>
-      )}
+      <PuzzleRenderer
+        currentPuzzle={currentPuzzle}
+      />
+
+      <HintPanel
+        hints={hints}
+        showHint={showHint}
+        onToggle={onHint}
+        disabled={false}
+        isLoading={isHintLoading}
+      />
+
+      <PuzzleCard
+        answer={answer}
+        setAnswer={setAnswer}
+        message=""
+        puzzleSolved={false}
+        timeLeft={timeLeft}
+        onSubmit={onSubmit}
+        isSubmitting={isSubmitting}
+      />
     </aside>
   );
 }

@@ -2,15 +2,17 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { GameContext } from "../context/GameContext";
+import { createRoom } from "../services/api";
 
 function CreateRoom() {
   const navigate = useNavigate();
-  const { user, setRoom } = useContext(GameContext);
+  const { user, token, setRoom } = useContext(GameContext);
 
   const [roomName, setRoomName] = useState("");
   const [maxPlayers, setMaxPlayers] = useState(4);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreateRoom = (e) => {
+  const handleCreateRoom = async (e) => {
     e.preventDefault();
 
     if (!roomName.trim()) {
@@ -18,28 +20,49 @@ function CreateRoom() {
       return;
     }
 
-    const roomCode =
-      "ESC" + Math.floor(100 + Math.random() * 900);
+    try {
+      setIsLoading(true);
 
-    const newRoom = {
-      roomName: roomName.trim(),
-      roomCode: roomCode,
-      maxPlayers: Number(maxPlayers),
-      players: [
+      const data = await createRoom(
         {
-          name: user?.name || "Player One",
-          avatar: user?.avatar || "🎮",
+          maxPlayers: Number(maxPlayers),
         },
-      ],
-    };
+        token
+      );
 
-    setRoom(newRoom);
+      console.log("CREATE ROOM RESPONSE:", data);
 
-    navigate("/lobby", {
+      if (!data?.room) {
+        throw new Error("Room was not returned by the server");
+      }
+
+      const newRoom = {
+        ...data.room,
+        roomName: roomName.trim(),
+        roomCode: data.room.code,
+        maxPlayers: Number(data.room.maxPlayers || maxPlayers),
+        players: [
+          {
+            name: user?.name || "Player One",
+            avatar: user?.avatar || "🎮",
+          },
+        ],
+      };
+
+      console.log("NEW ROOM:", newRoom);
+
+      setRoom(newRoom);
+
+      navigate("/lobby", {
         state: {
-            room: newRoom,
+          room: newRoom,
         },
-    });
+      });
+    } catch (error) {
+      alert(error.message || "Failed to create room");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -84,8 +107,6 @@ function CreateRoom() {
                 <option value="2">2 Players</option>
                 <option value="3">3 Players</option>
                 <option value="4">4 Players</option>
-                <option value="5">5 Players</option>
-                <option value="6">6 Players</option>
               </select>
             </div>
 
@@ -113,8 +134,9 @@ function CreateRoom() {
               <button
                 type="submit"
                 className="primary-btn"
+                disabled={isLoading}
               >
-                Create Room →
+                {isLoading ? "Creating..." : "Create Room →"}
               </button>
 
             </div>

@@ -1,83 +1,121 @@
 function PuzzleRenderer({ currentPuzzle }) {
+  if (!currentPuzzle) {
+    return null;
+  }
+
   return (
-    <>
-      {currentPuzzle === 1 && (
-        <>
-          <h2>The Whispering Wall</h2>
+    <div className="puzzle-content">
+      <h1>{currentPuzzle.title}</h1>
 
-          <p className="puzzle-description">
-            On the wall, mysterious words appear:
-          </p>
+      <p className="puzzle-description">
+        {currentPuzzle.description}
+      </p>
 
-          <div className="puzzle-riddle">
-            <span>“I follow you everywhere,</span>
-            <span>but disappear in the dark.</span>
-            <span>What am I?”</span>
+      {/* NUMBER PUZZLE */}
+      {currentPuzzle.type === "number" && (
+        <div className="number-pattern">
+          <div className="pattern-label">NUMBER SEQUENCE</div>
+
+          <div className="pattern-box">
+            <span>2</span>
+            <span>4</span>
+            <span>8</span>
+            <span>16</span>
+            <span className="pattern-arrow">→</span>
+            <span className="pattern-question">?</span>
           </div>
-        </>
+
+          <p className="pattern-hint">
+            Find the next number in the sequence.
+          </p>
+        </div>
       )}
 
-      {currentPuzzle === 2 && (
-        <>
-          <h2>The Mysterious Pattern</h2>
-
-          <p className="puzzle-description">
-            A strange sequence appears on the wall:
+      {/* CHOICE / DOOR PUZZLE */}
+      {currentPuzzle.type === "choice" && (
+        <div className="choice-puzzle">
+          <p className="choice-instruction">
+            Choose the door that leads to the escape route.
           </p>
 
-          <div className="puzzle-riddle">
-            <span>2 → 4 → 8 → 16 → ?</span>
-            <span>What number comes next?</span>
+          <div className="door-options">
+            <button
+              type="button"
+              className="door-option"
+              onClick={() => {
+                const event = new CustomEvent("select-puzzle-answer", {
+                  detail: "A",
+                });
+                window.dispatchEvent(event);
+              }}
+            >
+              <div className="door-symbol">🌙</div>
+              <div className="door-label">DOOR A</div>
+              <div className="door-description">Moon Symbol</div>
+            </button>
+
+            <button
+              type="button"
+              className="door-option"
+              onClick={() => {
+                const event = new CustomEvent("select-puzzle-answer", {
+                  detail: "B",
+                });
+                window.dispatchEvent(event);
+              }}
+            >
+              <div className="door-symbol">🔑</div>
+              <div className="door-label">DOOR B</div>
+              <div className="door-description">Golden Key Symbol</div>
+            </button>
+
+            <button
+              type="button"
+              className="door-option"
+              onClick={() => {
+                const event = new CustomEvent("select-puzzle-answer", {
+                  detail: "C",
+                });
+                window.dispatchEvent(event);
+              }}
+            >
+              <div className="door-symbol">💀</div>
+              <div className="door-label">DOOR C</div>
+              <div className="door-description">Skull Symbol</div>
+            </button>
           </div>
-        </>
-      )}
 
-      {currentPuzzle === 3 && (
-        <>
-          <h2>The Three Doors</h2>
-
-          <p className="puzzle-description">
-            Only one door leads to freedom.
+          <p className="choice-hint">
+            Enter <strong>A</strong>, <strong>B</strong>, or <strong>C</strong> as your answer.
           </p>
-
-          <div className="puzzle-riddle">
-            <span>Door A: Safe</span>
-            <span>Door B: Trapped</span>
-            <span>Door C: Unknown</span>
-            <span>Which door should you choose?</span>
-          </div>
-        </>
+        </div>
       )}
 
-      {currentPuzzle === 4 && (
-        <>
-          <h2>The Hidden Word</h2>
-
-          <p className="puzzle-description">
-            Decode the mysterious clue.
-          </p>
-
-          <div className="puzzle-riddle">
-            <span>What has keys but cannot open locks?</span>
-          </div>
-        </>
+      {/* TEXT PUZZLE */}
+      {currentPuzzle.type === "text" && (
+        <div className="puzzle-instruction">
+          Enter the answer that solves this riddle.
+        </div>
       )}
 
-      {currentPuzzle === 5 && (
-        <>
-          <h2>The Final Lock</h2>
-
-          <p className="puzzle-description">
-            Solve the final mystery to escape.
-          </p>
-
-          <div className="puzzle-riddle">
-            <span>I have hands but cannot clap.</span>
-            <span>What am I?</span>
-          </div>
-        </>
+      {/* CODE PUZZLE */}
+      {currentPuzzle.type === "code" && (
+        <div className="puzzle-instruction">
+          Enter the correct escape code.
+        </div>
       )}
-    </>
+
+      {/* IMAGE PUZZLE */}
+      {currentPuzzle.type === "image" && (
+        <div className="puzzle-instruction">
+          Examine the image carefully and determine the answer.
+        </div>
+      )}
+
+      <div className="puzzle-points">
+        ⭐ {currentPuzzle.points || 0} points
+      </div>
+    </div>
   );
 }
 

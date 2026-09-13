@@ -1,6 +1,10 @@
-function Timer({ timeLeft }) {
-  const minutes = Math.floor(timeLeft / 60);
-  const seconds = timeLeft % 60;
+function Timer({ timeLeft = 0 }) {
+  const safeTime = Number.isFinite(Number(timeLeft))
+    ? Math.max(0, Number(timeLeft))
+    : 0;
+
+  const minutes = Math.floor(safeTime / 60);
+  const seconds = safeTime % 60;
 
   const formattedTime = `${String(minutes).padStart(
     2,

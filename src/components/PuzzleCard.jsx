@@ -1,52 +1,61 @@
 function PuzzleCard({
   answer,
   setAnswer,
-  message,
-  puzzleSolved,
   timeLeft,
   onSubmit,
+  isSubmitting = false,
 }) {
-  const handleAnswerChange = (e) => {
-    setAnswer(e.target.value);
-
-    if (!puzzleSolved && timeLeft > 0) {
-      // The parent handles the actual message state.
-      // This keeps the input behavior consistent.
-    }
-  };
+  const isTimeUp = timeLeft <= 0;
 
   return (
-    <form className="answer-section" onSubmit={onSubmit}>
-      <label>Your Answer</label>
+    <form
+      className="answer-section"
+      onSubmit={onSubmit}
+    >
+      <label htmlFor="puzzle-answer">
+        Your Answer
+      </label>
 
       <div className="answer-row">
         <input
+          id="puzzle-answer"
           type="text"
           value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
-          placeholder="Enter your answer"
+          onChange={(e) =>
+            setAnswer(e.target.value)
+          }
+          placeholder={
+            isTimeUp
+              ? "Time is up"
+              : "Enter your answer"
+          }
           aria-label="Puzzle answer"
           autoComplete="off"
+          disabled={
+            isSubmitting || isTimeUp
+          }
         />
 
         <button
           type="submit"
           className="submit-answer-btn"
-          disabled={puzzleSolved || timeLeft <= 0}
+          disabled={
+            isSubmitting ||
+            isTimeUp ||
+            !answer.trim()
+          }
         >
-          {puzzleSolved ? "Solved ✓" : "Submit Answer"}
+          {isSubmitting
+            ? "Checking..."
+            : isTimeUp
+              ? "Time's Up"
+              : "Submit Answer"}
         </button>
       </div>
 
-      {message && (
-        <p
-          className={
-            puzzleSolved
-              ? "correct-message"
-              : "wrong-message"
-          }
-        >
-          {message}
+      {isTimeUp && (
+        <p className="wrong-message">
+          ⏰ Time is up!
         </p>
       )}
     </form>
