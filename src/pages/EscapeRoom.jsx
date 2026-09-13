@@ -1023,8 +1023,12 @@ function EscapeRoom() {
       <Navbar />
 
       <main className="escape-room-container">
-
         <GameHeader
+          roomName={
+            room?.roomName ||
+            room?.name ||
+            "The Haunted Mansion"
+          }
           currentPuzzle={currentPuzzle.order}
           totalPuzzles={TOTAL_PUZZLES}
           timeLeft={timeLeft}

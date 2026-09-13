@@ -28,6 +28,7 @@ const generateRoomCode = () => {
 
 const createRoom = async ({
   hostId,
+  name,
   maxPlayers = 4,
 }) => {
   let code;
@@ -43,6 +44,7 @@ const createRoom = async ({
   } while (existingRoom);
 
   const room = await Room.create({
+    name,
     code,
     host: hostId,
     maxPlayers,

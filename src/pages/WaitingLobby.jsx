@@ -105,7 +105,10 @@ function WaitingLobby() {
           ...backendRoom,
           roomCode: backendRoom.code,
           roomName:
-            room.roomName || "The Haunted Mansion",
+            backendRoom.name ||
+            backendRoom.roomName ||
+            room.roomName ||
+            "The Haunted Mansion",
         });
 
         setError("");

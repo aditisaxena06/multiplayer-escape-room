@@ -8,6 +8,7 @@ const createRoom = async (req, res, next) => {
 
     const room = await roomService.createRoom({
       hostId: req.user.userId,
+      name: req.body.name,
       maxPlayers,
     });
 
@@ -26,7 +27,7 @@ const getRoom = async (req, res, next) => {
   try {
     const room = await roomService.getRoomByCode(
       req.params.code,
-      req.user.userId
+      req.user.userId,
     );
 
     if (!room) {

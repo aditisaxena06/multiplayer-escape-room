@@ -25,6 +25,7 @@ function CreateRoom() {
 
       const data = await createRoom(
         {
+          name: roomName.trim(),
           maxPlayers: Number(maxPlayers),
         },
         token
@@ -94,6 +95,9 @@ function CreateRoom() {
                 placeholder="e.g. The Haunted Mansion"
                 value={roomName}
                 onChange={(e) => setRoomName(e.target.value)}
+                minLength={2}
+                maxLength={50}
+                required
               />
             </div>
 
