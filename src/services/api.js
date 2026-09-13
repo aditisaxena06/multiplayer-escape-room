@@ -86,7 +86,7 @@ export const getCurrentUser = async (token) => {
 // ROOMS
 // =========================================
 
-export const createRoom = async ({ maxPlayers }, token) => {
+export const createRoom = async ({ name, maxPlayers }, token) => {
   const response = await fetch(`${API_BASE_URL}/api/rooms`, {
     method: "POST",
     headers: {
@@ -94,6 +94,7 @@ export const createRoom = async ({ maxPlayers }, token) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
+      name: name.trim(),
       maxPlayers: Number(maxPlayers),
     }),
   });
