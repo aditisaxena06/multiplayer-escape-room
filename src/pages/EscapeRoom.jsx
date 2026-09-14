@@ -158,21 +158,53 @@ function EscapeRoom() {
       ]);
     });
 
-    socket.on("player:online", (player) => {
-      setActivities((previous) => [
-        ...previous,
-        {
-          id: `online-${Date.now()}-${player.userId}`,
-          icon: "👋",
-          text: `${player.name} joined the room`,
-          time: new Date().toLocaleTimeString([], {
+    socket.on("activity:history", (history) => {
+      console.log(
+        "📋 ACTIVITY HISTORY:",
+        history
+      );
+
+      const formattedActivities =
+        history.map((activity) => ({
+          id: activity.id,
+          icon: activity.icon || "🎮",
+          text: activity.text,
+          time: new Date(
+            activity.timestamp
+          ).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit",
           }),
-        },
-      ]);
+        }));
+
+      setActivities(formattedActivities);
     });
 
+    socket.on("room:activity", (activity) => {
+      console.log(
+        "📢 ROOM ACTIVITY:",
+        activity
+      );
+
+      const formattedActivity = {
+        id:
+          activity.id ||
+          `activity-${Date.now()}-${Math.random()}`,
+        icon: activity.icon || "🎮",
+        text: activity.text,
+        time: new Date(
+          activity.timestamp
+        ).toLocaleTimeString([], {
+          hour: "numeric",
+          minute: "2-digit",
+        }),
+      };
+
+      setActivities((previous) => [
+        ...previous,
+        formattedActivity,
+      ]);
+    });
     socket.on("player:offline", ({ userId }) => {
       setActivities((previous) => {
         const player = players.find(
@@ -254,7 +286,9 @@ function EscapeRoom() {
       socket.off("chat:history");
       socket.off("chat:message");
 
-      socket.off("player:online");
+      socket.off("activity:history");
+      socket.off("room:activity");
+
       socket.off("player:offline");
 
       socket.off("player:joined");

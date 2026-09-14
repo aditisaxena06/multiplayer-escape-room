@@ -35,6 +35,7 @@ setIO(io);
  */
 
 const roomMessages = new Map();
+const roomActivities = new Map();
 
 /*
  * =========================================================
@@ -169,8 +170,54 @@ io.on("connection", (socket) => {
       );
 
       /*
-       * First connection:
-       * player joined the socket room.
+       * Send existing activity history.
+       */
+      socket.emit(
+        "activity:history",
+        roomActivities.get(code) || []
+      );
+
+      /*
+       * Player activity
+       */
+      const activity = {
+        id: `${Date.now()}-${socket.user._id}`,
+        icon: wasConnected ? "🔄" : "👋",
+        text: wasConnected
+          ? `${socket.user.name} reconnected to the room`
+          : `${socket.user.name} joined the room`,
+        userId: socket.user._id.toString(),
+        name: socket.user.name,
+        timestamp: new Date().toISOString(),
+      };
+
+      /*
+       * Store activity history for this room.
+       */
+      if (!roomActivities.has(code)) {
+        roomActivities.set(code, []);
+      }
+
+      const activities = roomActivities.get(code);
+
+      activities.push(activity);
+
+      if (activities.length > 50) {
+        activities.shift();
+      }
+
+      /*
+       * Broadcast activity to EVERY player
+       * currently connected to this room.
+       */
+      io.to(code).emit(
+        "room:activity",
+        activity
+      );
+
+      /*
+       * Keep existing player events for
+       * player-list functionality.
        */
       if (!wasConnected) {
         io.to(code).emit(
@@ -185,11 +232,6 @@ io.on("connection", (socket) => {
         );
       }
 
-      /*
-       * Reconnection:
-       * player was already known but came
-       * back after disconnecting.
-       */
       if (wasConnected) {
         io.to(code).emit(
           "player:reconnected",
@@ -203,10 +245,6 @@ io.on("connection", (socket) => {
         );
       }
 
-      /*
-       * Keep existing online event for
-       * backwards compatibility.
-       */
       io.to(code).emit(
         "player:online",
         {
