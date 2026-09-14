@@ -3439,7 +3439,7 @@ body {
 }
 
 body::before {
-  content: none;
+  display: none !important;
 }
 
 button,
@@ -5818,3 +5818,4 @@ body::after,
   display: none !important;
   border: 0 !important;
 }
+

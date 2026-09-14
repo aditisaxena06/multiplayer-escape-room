@@ -122,10 +122,7 @@ const getGameHistory = async (userId) => {
   const history = await GameResult.find({
     room: { $in: roomIds },
   })
-    .populate(
-      "room",
-      "code name status maxPlayers"
-    )
+    .populate("room", "name code status maxPlayers")
     .populate(
       "session",
       "status puzzlesSolved totalScore hintsUsed startedAt endedAt durationSeconds"
