@@ -15,9 +15,9 @@ function PlayerCard({
         {player.avatar || "🎮"}
       </div>
 
-      <div>
-        <h3>
-          {player.name}
+      <div className="game-player-info">
+        <div className="game-player-name-row">
+          <h3>{player.name}</h3>
 
           {isCurrentUser && (
             <span className="you-tag">
@@ -30,7 +30,7 @@ function PlayerCard({
               👑 HOST
             </span>
           )}
-        </h3>
+        </div>
 
         <p>
           <span
@@ -39,7 +39,9 @@ function PlayerCard({
             }`}
           ></span>
 
-          {isDisconnected ? "Disconnected" : "Exploring"}
+          {isDisconnected
+            ? "Disconnected"
+            : "Exploring"}
         </p>
       </div>
     </div>

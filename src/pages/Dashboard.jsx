@@ -7,13 +7,35 @@ function Dashboard() {
   const navigate = useNavigate();
   const { user, room } = useContext(GameContext);
 
+  const hasRoom = Boolean(room?.roomCode || room?.code);
+
+  const roomName =
+    room?.roomName ||
+    room?.name ||
+    "No active room";
+
+  const roomCode =
+    room?.roomCode ||
+    room?.code ||
+    "";
+
+  const playerCount =
+    room?.players?.length || 0;
+
+  const maxPlayers =
+    room?.maxPlayers || 4;
+
   return (
     <div className="dashboard-page">
       <Navbar />
 
       <main className="dashboard-container">
 
+        {/* =========================
+            HERO
+        ========================= */}
         <section className="hero-section">
+
           <div className="hero-badge">
             MULTIPLAYER ESCAPE ROOM
           </div>
@@ -28,6 +50,7 @@ function Dashboard() {
           </p>
 
           <div className="hero-buttons">
+
             <button
               className="primary-btn hero-btn"
               onClick={() => navigate("/create-room")}
@@ -41,96 +64,172 @@ function Dashboard() {
             >
               🔑 Join Room
             </button>
+
           </div>
+
         </section>
 
+
+        {/* =========================
+            QUICK STATS
+        ========================= */}
         <section className="stats-section">
 
           <div className="stat-card">
-            <div className="stat-icon">🎮</div>
+            <div className="stat-icon">
+              🎮
+            </div>
+
             <div>
-              <p>Games Played</p>
-              <h2>12</h2>
+              <p>Game Mode</p>
+              <h2>Multiplayer</h2>
             </div>
           </div>
 
+
           <div className="stat-card">
-            <div className="stat-icon">🏆</div>
+            <div className="stat-icon">
+              🧩
+            </div>
+
             <div>
-              <p>Successful Escapes</p>
-              <h2>8</h2>
+              <p>Puzzles</p>
+              <h2>5</h2>
             </div>
           </div>
 
+
           <div className="stat-card">
-            <div className="stat-icon">⚡</div>
+            <div className="stat-icon">
+              ⏱️
+            </div>
+
             <div>
-              <p>Win Rate</p>
-              <h2>67%</h2>
+              <p>Time Limit</p>
+              <h2>5 Min</h2>
             </div>
           </div>
 
         </section>
 
+
+        {/* =========================
+            RECENT / ACTIVE ROOM
+        ========================= */}
         <section className="recent-section">
 
           <div className="section-heading">
+
             <div>
-              <p className="section-label">YOUR ACTIVITY</p>
-              <h2>Recent Room</h2>
+              <p className="section-label">
+                YOUR ACTIVITY
+              </p>
+
+              <h2>
+                {hasRoom
+                  ? "Active Room"
+                  : "Recent Room"}
+              </h2>
             </div>
 
             <button
               className="text-btn"
               onClick={() => navigate("/join-room")}
             >
-              Browse Rooms →
+              Join Another →
             </button>
+
           </div>
 
-          <div className="room-preview-card">
 
-            <div className="room-info">
+          {hasRoom ? (
+            <div className="room-preview-card">
 
-              <div className="room-icon">
-                🏚️
+              <div className="room-info">
+
+                <div className="room-icon">
+                  🏚️
+                </div>
+
+                <div>
+
+                  <h3>
+                    {roomName}
+                  </h3>
+
+                  <p>
+                    Room Code:{" "}
+                    <span>
+                      {roomCode}
+                    </span>
+                  </p>
+
+                </div>
+
               </div>
 
-              <div>
-                <h3>
-                  {room?.roomName || "The Haunted Mansion"}
-                </h3>
 
-                <p>
-                  Room Code:{" "}
-                  <span>
-                    {room?.roomCode || "ESCAPE123"}
-                  </span>
-                </p>
+              <div className="room-meta">
+
+                <span className="player-count">
+                  👥 {playerCount}/{maxPlayers}
+                </span>
+
+                <button
+                  className="secondary-btn small-btn"
+                  onClick={() => navigate("/lobby")}
+                >
+                  View Room →
+                </button>
+
               </div>
 
             </div>
+          ) : (
+            <div className="room-preview-card empty-room-card">
 
-            <div className="room-meta">
+              <div className="room-info">
 
-              <span className="player-count">
-                👥 {room?.players?.length || 3}/
-                {room?.maxPlayers || 4}
-              </span>
+                <div className="room-icon">
+                  🔐
+                </div>
 
-              <button
-                className="secondary-btn small-btn"
-                onClick={() => navigate("/lobby")}
-              >
-                View Room →
-              </button>
+                <div>
+
+                  <h3>
+                    No Active Room
+                  </h3>
+
+                  <p>
+                    Create a room or join your
+                    friends to begin an escape.
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              <div className="room-meta">
+
+                <button
+                  className="secondary-btn small-btn"
+                  onClick={() => navigate("/create-room")}
+                >
+                  Create Room →
+                </button>
+
+              </div>
 
             </div>
-
-          </div>
+          )}
 
         </section>
 
+
+        {/* =========================
+            WELCOME MESSAGE
+        ========================= */}
         <section className="welcome-message">
 
           <span>👋</span>

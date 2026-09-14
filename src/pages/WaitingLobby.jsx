@@ -246,6 +246,8 @@ function WaitingLobby() {
         ...backendRoom,
         roomCode: backendRoom.code,
         roomName:
+          backendRoom.name ||
+          backendRoom.roomName ||
           room.roomName ||
           "The Haunted Mansion",
       });
@@ -379,7 +381,11 @@ function WaitingLobby() {
         {/* HEADER */}
         <section className="lobby-header">
           <p className="section-label">
-            WAITING FOR PLAYERS
+            {room?.status === "ready"
+              ? "READY TO ESCAPE"
+              : room?.status === "active"
+                ? "GAME IN PROGRESS"
+                : "WAITING FOR PLAYERS"}
           </p>
 
           <h1>
@@ -435,11 +441,30 @@ function WaitingLobby() {
         <section className="room-code-card">
           <p>ROOM CODE</p>
 
-          <h2>
-            {room?.roomCode ||
-              room?.code ||
-              "------"}
-          </h2>
+          <div className="room-code-display">
+            <h2>
+              {room?.roomCode ||
+                room?.code ||
+                "------"}
+            </h2>
+
+            <button
+              type="button"
+              className="copy-code-btn"
+              onClick={() => {
+                const code =
+                  room?.roomCode ||
+                  room?.code ||
+                  "";
+
+                if (code) {
+                  navigator.clipboard.writeText(code);
+                }
+              }}
+            >
+              📋 Copy Code
+            </button>
+          </div>
 
           <span>
             Share this code with your friends
