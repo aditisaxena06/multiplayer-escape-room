@@ -9,6 +9,8 @@ const connectDB = require("./config/db");
 const User = require("./models/User");
 const Room = require("./models/Room");
 const RoomPlayer = require("./models/RoomPlayer");
+const ChatMessage = require("./models/ChatMessage");
+const RoomActivity = require("./models/RoomActivity");
 const { setIO } = require("./services/socket");
 
 const PORT = process.env.PORT || 5000;
@@ -27,15 +29,6 @@ const io = new Server(httpServer, {
 });
 
 setIO(io);
-
-/*
- * =========================================================
- * IN-MEMORY CHAT HISTORY
- * =========================================================
- */
-
-const roomMessages = new Map();
-const roomActivities = new Map();
 
 /*
  * =========================================================
@@ -164,56 +157,72 @@ io.on("connection", (socket) => {
       /*
        * Send existing chat history.
        */
+      const chatHistory = await ChatMessage.find({
+        room: room._id,
+      })
+        .sort({ timestamp: -1 })
+        .limit(100)
+        .lean();
+
+      const activityHistory = await RoomActivity.find({
+        room: room._id,
+      })
+        .sort({ timestamp: -1 })
+        .limit(50)
+        .lean();
+
       socket.emit(
         "chat:history",
-        roomMessages.get(code) || []
+        chatHistory.reverse().map((message) => ({
+          id: message._id.toString(),
+          userId: message.user.toString(),
+          name: message.name,
+          avatar: message.avatar || "🎮",
+          text: message.text,
+          timestamp: message.timestamp,
+        }))
       );
 
-      /*
-       * Send existing activity history.
-       */
       socket.emit(
         "activity:history",
-        roomActivities.get(code) || []
+        activityHistory.reverse().map((activity) => ({
+          id: activity._id.toString(),
+          userId: activity.user.toString(),
+          name: activity.name,
+          icon: activity.icon || "🎮",
+          text: activity.text,
+          timestamp: activity.timestamp,
+        }))
       );
 
       /*
        * Player activity
        */
-      const activity = {
-        id: `${Date.now()}-${socket.user._id}`,
+      const savedActivity = await RoomActivity.create({
+        room: room._id,
+        user: socket.user._id,
+        name: socket.user.name,
         icon: wasConnected ? "🔄" : "👋",
         text: wasConnected
           ? `${socket.user.name} reconnected to the room`
           : `${socket.user.name} joined the room`,
-        userId: socket.user._id.toString(),
-        name: socket.user.name,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(),
+      });
+
+      const activity = {
+        id: savedActivity._id.toString(),
+        icon: savedActivity.icon,
+        text: savedActivity.text,
+        userId: savedActivity.user.toString(),
+        name: savedActivity.name,
+        timestamp: savedActivity.timestamp.toISOString(),
       };
-
-      /*
-       * Store activity history for this room.
-       */
-      if (!roomActivities.has(code)) {
-        roomActivities.set(code, []);
-      }
-
-      const activities = roomActivities.get(code);
-
-      activities.push(activity);
-
-      if (activities.length > 50) {
-        activities.shift();
-      }
 
       /*
        * Broadcast activity to EVERY player
        * currently connected to this room.
        */
-      io.to(code).emit(
-        "room:activity",
-        activity
-      );
+      io.to(code).emit("room:activity", activity);
 
       /*
        * Keep existing player events for
@@ -277,7 +286,7 @@ io.on("connection", (socket) => {
    * =======================================================
    */
 
-  socket.on("chat:send", (messageText) => {
+  socket.on("chat:send", async (messageText) => {
     try {
       if (!socket.roomCode) {
         return;
@@ -299,32 +308,24 @@ io.on("connection", (socket) => {
         return;
       }
 
+      const savedMessage =
+        await ChatMessage.create({
+          room: socket.roomId,
+          user: socket.user._id,
+          name: socket.user.name,
+          avatar: socket.user.avatar || "🎮",
+          text,
+          timestamp: new Date(),
+        });
+
       const message = {
-        id: `${Date.now()}-${socket.user._id}`,
+        id: savedMessage._id.toString(),
         userId: socket.user._id.toString(),
         name: socket.user.name,
         avatar: socket.user.avatar || "🎮",
         text,
-        timestamp: new Date().toISOString(),
+        timestamp: savedMessage.timestamp.toISOString(),
       };
-
-      if (!roomMessages.has(socket.roomCode)) {
-        roomMessages.set(
-          socket.roomCode,
-          []
-        );
-      }
-
-      const messages =
-        roomMessages.get(
-          socket.roomCode
-        );
-
-      messages.push(message);
-
-      if (messages.length > 100) {
-        messages.shift();
-      }
 
       io.to(socket.roomCode).emit(
         "chat:message",
