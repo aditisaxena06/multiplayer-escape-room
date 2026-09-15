@@ -109,10 +109,21 @@ app.use("/api/results", resultRoutes);
 app.use("/api/scores", scoreRoutes);
 
 app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message:
-      "Multiplayer Escape Room API is running",
+  res.status(200).json({
+    name: "Escape Together API",
+    version: "1.0.0",
+    status: "running",
+    database: "MongoDB Atlas",
+    realtime: "Socket.IO",
+    endpoints: {
+      auth: "/api/auth",
+      rooms: "/api/rooms",
+      puzzles: "/api/puzzles",
+      gameSessions: "/api/game-sessions",
+      results: "/api/results",
+      scores: "/api/scores",
+      health: "/api/health",
+    },
   });
 });
 
